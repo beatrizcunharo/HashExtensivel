@@ -13,7 +13,7 @@ public class Balde {
     private int tamanho;//tamanho da lista
     List<Item> balde;
     
-    Balde(int profundidadeLocal){
+    Balde(int profundidadeLocal, int tamanho){
         this.profundidadeLocal = profundidadeLocal;
         this.tamanho = tamanho;
         balde = new ArrayList<>();
@@ -32,6 +32,13 @@ public class Balde {
         }
         return null;
     }
+    
+    /*public void dividirBaldes(int tamanho){
+        if(tamanho == this.tamanho){
+            balde.
+        }
+    
+    }*/
     
 
     /**
