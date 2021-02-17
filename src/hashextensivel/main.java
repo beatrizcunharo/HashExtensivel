@@ -22,10 +22,9 @@ public class main {
 
             String linha = leitura.readLine(); 
             while (linha != null) {
-                System.out.println("\n"+linha);
-
-                linha = leitura.readLine(); 
+                System.out.println("\n"+linha); 
                 listaDeEntrada.add(linha);
+                linha = leitura.readLine();
             }
             leitura.close();
         } catch (IOException e) {
@@ -34,16 +33,21 @@ public class main {
         return listaDeEntrada;
     }
     
-    private static void processamento(){
-        Balde balde;
+    private static void processamento() throws IOException{
+        Item item;
         Scanner input = new Scanner(System.in);
         System.out.println("Entre com o tamanho a ser usado pelos baldes: ");
-        int tamanhoGlobal = input.nextInt();
+        int tamanho = input.nextInt();
         System.out.println("Entre com o número de bits a serem usados nas pseudo-chaves: ");
         int bits = input.nextInt();
-        balde = new Balde(bits, tamanhoGlobal);
-        
-        
+        List<String> dados = leitura();
+        Diretorio diretorios = new Diretorio(bits+1);
+        for(int i=0; i< dados.size(); i++){
+            String[] chave = dados.get(i).split(";");
+            item = new Item(chave[0], chave[1]);
+            diretorios.diretorio.get(i).setPseudoChaves(chave[0]);
+            diretorios.inserirItem(item, bits, tamanho);
+        }
     }
     
     
@@ -58,6 +62,8 @@ public class main {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
+        cabecalho();
+        processamento();
         
     }
     

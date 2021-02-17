@@ -32,9 +32,9 @@ public class Diretorio {
             this.duplicarDiretorio();
     }
     
-    public String buscaChave (int chave){
+    public String buscaChave (String chave){
         for (Balde balde : diretorio) {
-            if(balde.getPseudoChaves().equals(chave))
+            if(balde.getPseudoChaves().contains(chave.substring(0, balde.getProfundidadeLocal())))
                 return balde.getPseudoChaves();
         }
         return null;
@@ -45,9 +45,9 @@ public class Diretorio {
         this.profundidadeGlobal = this.profundidadeGlobal + 1;
         String chave;
         Balde baldes = new Balde();
-        String type = this.type();
+        String tipo = this.tipo();
         for(int i=0; i< tamanhoGlobal / 2; i++){
-            if(type.equals("bits")){
+            if(tipo.equals("bits")){
                 chave = baldes.balde.get(i).getChave();
                 this.diretorio.get(i).setPseudoChaves("0".concat(chave));
             }else{
@@ -57,7 +57,7 @@ public class Diretorio {
             }    
         }
         for(int i = tamanhoGlobal/2; i < tamanhoGlobal; i++){
-            if(type.equals("bits")){
+            if(tipo.equals("bits")){
                 chave = baldes.balde.get(i).getChave();
                 this.diretorio.get(i).setPseudoChaves("1".concat(chave));
             }else{
@@ -68,7 +68,7 @@ public class Diretorio {
         }
     }
     
-    public String type(){
+    public String tipo(){
         if(diretorio.get(0).getPseudoChaves().contains("0") || diretorio.get(0).getPseudoChaves().contains("1"))
             return "bits";
         else
@@ -76,13 +76,20 @@ public class Diretorio {
     }
     
     public int hash (String chave){
-        String substring = chave.substring(0,profundidadeGlobal);  
-        int index = Integer.parseInt(substring, 2);
+        String tipo = tipo();
+        int index;
+        if(tipo.equals("bits")){
+            String substring = chave.substring(0,profundidadeGlobal);  
+            index = Integer.parseInt(substring, 2);
+        }else{
+            String substring = chave.substring(0,profundidadeGlobal);
+            index = Integer.parseInt(substring);
+        }
         return index;
     }
     
-    public void inserirItem (Item item){
-        Balde baldes = new Balde();
+    public void inserirItem (Item item, int profundidadeLocal, int tamanho){
+        Balde baldes = new Balde(profundidadeLocal, tamanho);
         fatorDeCarga();
         int index = hash(item.getChave());
         if(baldes.balde.size() == baldes.getTamanho()){
