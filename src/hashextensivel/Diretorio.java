@@ -45,14 +45,34 @@ public class Diretorio {
         this.profundidadeGlobal = this.profundidadeGlobal + 1;
         String chave;
         Balde baldes = new Balde();
+        String type = this.type();
         for(int i=0; i< tamanhoGlobal / 2; i++){
-            chave = baldes.balde.get(i).getChave();
-            this.diretorio.get(i).setPseudoChaves("0".concat(chave));
+            if(type.equals("bits")){
+                chave = baldes.balde.get(i).getChave();
+                this.diretorio.get(i).setPseudoChaves("0".concat(chave));
+            }else{
+                chave = baldes.balde.get(i).getChave();
+                String substring = chave.substring(0,profundidadeGlobal);
+                this.diretorio.get(i).setPseudoChaves(substring);
+            }    
         }
         for(int i = tamanhoGlobal/2; i < tamanhoGlobal; i++){
-            chave = baldes.balde.get(i).getChave();
-            this.diretorio.get(i).setPseudoChaves("1".concat(chave));
+            if(type.equals("bits")){
+                chave = baldes.balde.get(i).getChave();
+                this.diretorio.get(i).setPseudoChaves("1".concat(chave));
+            }else{
+                chave = baldes.balde.get(i).getChave();
+                String substring = chave.substring(0,profundidadeGlobal);
+                this.diretorio.get(i).setPseudoChaves(substring);
+            }
         }
+    }
+    
+    public String type(){
+        if(diretorio.get(0).getPseudoChaves().contains("0") || diretorio.get(0).getPseudoChaves().contains("1"))
+            return "bits";
+        else
+            return "aleatorio";
     }
     
     public int hash (String chave){
@@ -71,6 +91,7 @@ public class Diretorio {
             diretorio.get(indexAtual).inserirItem(item);
         }else
             diretorio.get(index).inserirItem(item);
+        baldes.setPseudoChaves(item.getChave());
     }    
 
     /**
