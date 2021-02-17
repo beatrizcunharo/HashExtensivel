@@ -5,8 +5,8 @@ package hashextensivel;
  * @author Beatriz
  */
 public class Item {
-    private String chave;
-    private String dados;
+    private String chave; // Chave dos itens armazenados dentro do balde
+    private String dados; // Dados armazenados dentro do balde
     
     Item(String chave, String dados){
         this.chave = chave;

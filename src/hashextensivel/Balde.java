@@ -8,9 +8,9 @@ import java.util.List;
  * @author Beatriz
  */
 public class Balde {
-    private String pseudoChaves;
-    private int profundidadeLocal; //profundidade dos dados
-    private int tamanho;//tamanho da lista
+    private String pseudoChaves; // representação das pseudo-chaves 
+    private int profundidadeLocal; // profundidade dos dados
+    private int tamanho;// tamanho da lista
     List<Item> balde;
     
     Balde(int profundidadeLocal, int tamanho){
@@ -18,11 +18,21 @@ public class Balde {
         this.tamanho = tamanho;
         balde = new ArrayList<>();
     }
+   
+    Balde(){
+        // CONSTRUTOR VAZIO
+    }
     
-    public void inserirItem(Item item){
+    /*public void inserirItem(Item item){
+        Diretorio diretorio = new Diretorio();
+        diretorio.fatorDeCarga();
+        double fatorDeCarga = diretorio.getFatorDeCargaAtual();
+        double fatorDeCargaReferencia = diretorio.getFatorDeCargaReferencia();
+       
+        
         if(balde.size() < tamanho)
             balde.add(item);
-        // TODO: lembrar de tratar caso um balde esteja cheio        
+       
     }    
     
     public Item buscaItem(String chave){
@@ -31,7 +41,7 @@ public class Balde {
                 return item;
         }
         return null;
-    }
+    }*/
     
     /**
      * @return the pseudoChaves
