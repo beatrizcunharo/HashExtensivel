@@ -11,15 +11,25 @@ public class Diretorio {
     List<Balde> diretorio;
     private int tamanhoGlobal;
     private int profundidadeGlobal;
+    private double fatorDeCargaReferencia = 0.75;
+    private double fatorDeCargaAtual;
     
     Diretorio(int profundidadeGlobal){
         diretorio = new ArrayList<>();
         this.profundidadeGlobal = profundidadeGlobal;
         this.tamanhoGlobal = 2 ^ profundidadeGlobal;
+        this.fatorDeCargaAtual = 0;
     }
     
     Diretorio(){
         // Apenas para construir um diretório
+    }
+    
+    public void fatorDeCarga(){
+        this.setFatorDeCargaAtual(diretorio.size() / this.tamanhoGlobal);
+
+        if(this.getFatorDeCargaAtual() >= this.getFatorDeCargaReferencia())
+            this.duplicarDiretorio();
     }
     
     public String buscaChave (int chave){
@@ -45,10 +55,6 @@ public class Diretorio {
         }
     }
     
-    public void duplicarBalde (){
-        Balde baldes = new Balde();
-    }
-    
     public int hash (String chave){
         String substring = chave.substring(0,profundidadeGlobal);  
         int index = Integer.parseInt(substring, 2);
@@ -56,9 +62,15 @@ public class Diretorio {
     }
     
     public void inserirItem (Item item){
+        Balde baldes = new Balde();
         int index = hash(item.getChave());
-        //diretorio.get(index).inserirItem(item);
-        // verificar espaço do balde
+        fatorDeCarga();
+        if(baldes.balde.size() == baldes.getTamanho()){
+            baldes.duplicarBalde();
+            int indexAtual = hash(item.getChave());
+            diretorio.get(indexAtual).inserirItem(item);
+        }else
+            diretorio.get(index).inserirItem(item);
     }    
 
     /**
@@ -80,5 +92,33 @@ public class Diretorio {
      */
     public void setProfundidadeGlobal(int profundidadeGlobal) {
         this.profundidadeGlobal = profundidadeGlobal;
+    }
+
+    /**
+     * @return the fatorDeCargaReferencia
+     */
+    public double getFatorDeCargaReferencia() {
+        return fatorDeCargaReferencia;
+    }
+
+    /**
+     * @param fatorDeCargaReferencia the fatorDeCargaReferencia to set
+     */
+    public void setFatorDeCargaReferencia(double fatorDeCargaReferencia) {
+        this.fatorDeCargaReferencia = fatorDeCargaReferencia;
+    }
+
+    /**
+     * @return the fatorDeCargaAtual
+     */
+    public double getFatorDeCargaAtual() {
+        return fatorDeCargaAtual;
+    }
+
+    /**
+     * @param fatorDeCargaAtual the fatorDeCargaAtual to set
+     */
+    public void setFatorDeCargaAtual(double fatorDeCargaAtual) {
+        this.fatorDeCargaAtual = fatorDeCargaAtual;
     }
 }

@@ -23,16 +23,14 @@ public class Balde {
         // CONSTRUTOR VAZIO
     }
     
-    /*public void inserirItem(Item item){
-        Diretorio diretorio = new Diretorio();
-        diretorio.fatorDeCarga();
-        double fatorDeCarga = diretorio.getFatorDeCargaAtual();
-        double fatorDeCargaReferencia = diretorio.getFatorDeCargaReferencia();
-       
-        
-        if(balde.size() < tamanho)
-            balde.add(item);
-       
+    public void duplicarBalde(){
+        this.profundidadeLocal = this.profundidadeLocal + 1;
+        this.tamanho = this.tamanho * 2;
+        // TERMINAR
+    }
+    
+    public void inserirItem(Item item){
+        balde.add(item);
     }    
     
     public Item buscaItem(String chave){
@@ -41,7 +39,7 @@ public class Balde {
                 return item;
         }
         return null;
-    }*/
+    }
     
     /**
      * @return the pseudoChaves
