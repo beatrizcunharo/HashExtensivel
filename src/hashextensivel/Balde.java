@@ -23,10 +23,12 @@ public class Balde {
         // CONSTRUTOR VAZIO
     }
     
-    public void duplicarBalde(){
-        this.profundidadeLocal = this.profundidadeLocal + 1;
-        this.tamanho = this.tamanho * 2;
-        // TERMINAR
+    public void duplicarBalde(Item item, int index){
+        Diretorio diretorios = new Diretorio();
+        Balde baldeNovo = new Balde(this.profundidadeLocal + 1, this.tamanho);
+        diretorios.diretorio.add(index, baldeNovo);
+        diretorios.diretorio.get(index).setProfundidadeLocal(profundidadeLocal + 1);
+        diretorios.diretorio.get(index).inserirItem(item);
     }
     
     public void inserirItem(Item item){

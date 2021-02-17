@@ -83,10 +83,10 @@ public class Diretorio {
     
     public void inserirItem (Item item){
         Balde baldes = new Balde();
-        int index = hash(item.getChave());
         fatorDeCarga();
+        int index = hash(item.getChave());
         if(baldes.balde.size() == baldes.getTamanho()){
-            baldes.duplicarBalde();
+            baldes.duplicarBalde(item, index);
             int indexAtual = hash(item.getChave());
             diretorio.get(indexAtual).inserirItem(item);
         }else
