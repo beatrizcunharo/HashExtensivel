@@ -8,54 +8,36 @@ import java.util.List;
  * @author Beatriz
  */
 public class Balde {
-    private String pseudoChaves; // representação das pseudo-chaves 
     private int profundidadeLocal; // profundidade dos dados
     private int tamanho;// tamanho da lista
-    List<Item> balde;
+    private int bits; // bits de entrada
+    List<String> balde;
     
-    Balde(int profundidadeLocal, int tamanho){
-        this.profundidadeLocal = profundidadeLocal;
+    Balde(int tamanho, int bits){
+        this.profundidadeLocal = 1;
         this.tamanho = tamanho;
+        this.bits = bits;
         balde = new ArrayList<>();
     }
-   
-    Balde(){
+    
+    Balde (){
         // CONSTRUTOR VAZIO
     }
     
-    public void duplicarBalde(Item item, int index){
-        Diretorio diretorios = new Diretorio();
-        Balde baldeNovo = new Balde(this.profundidadeLocal + 1, this.tamanho);
-        diretorios.diretorio.add(index, baldeNovo);
-        diretorios.diretorio.get(index).setProfundidadeLocal(profundidadeLocal + 1);
-        diretorios.diretorio.get(index).inserirItem(item);
+    public boolean isBaldeCheio(){
+        if(balde.size() == tamanho)
+            return true;
+        return false;
     }
     
-    public void inserirItem(Item item){
-        balde.add(item);
+    public void inserirChave(String chave){
+        this.balde.add(chave);
     }    
     
-    public Item buscaItem(String chave){
-        for (Item item : balde) {
-            if(item.getChave().equals(chave))
-                return item;
-        }
-        return null;
+    public void incrementaProfundidade(){
+        this.profundidadeLocal = this.profundidadeLocal + 1;
     }
     
-    /**
-     * @return the pseudoChaves
-     */
-    public String getPseudoChaves() {
-        return pseudoChaves;
-    }
-
-    /**
-     * @param pseudoChaves the pseudoChaves to set
-     */
-    public void setPseudoChaves(String pseudoChaves) {
-        this.pseudoChaves = pseudoChaves;
-    }
     /**
      * @return the profundidadeLocal
      */
@@ -82,6 +64,20 @@ public class Balde {
      */
     public void setTamanho(int tamanho) {
         this.tamanho = tamanho;
+    }
+
+    /**
+     * @return the bits
+     */
+    public int getBits() {
+        return bits;
+    }
+
+    /**
+     * @param bits the bits to set
+     */
+    public void setBits(int bits) {
+        this.bits = bits;
     }
     
 }

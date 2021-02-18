@@ -10,97 +10,97 @@ import java.util.List;
 public class Diretorio {
     List<Balde> diretorio;
     private int tamanhoGlobal;
+    private int tamanhoBalde;
+    int tamanhoBits;
     private int profundidadeGlobal;
-    private double fatorDeCargaReferencia = 0.75;
-    private double fatorDeCargaAtual;
     
-    Diretorio(int profundidadeGlobal){
+    Diretorio(int tamanho, int bits){
         diretorio = new ArrayList<>();
-        this.profundidadeGlobal = profundidadeGlobal;
-        this.tamanhoGlobal = 2 ^ profundidadeGlobal;
-        this.fatorDeCargaAtual = 0;
+        this.profundidadeGlobal = 2;
+        this.tamanhoGlobal = (int) Math.pow(2, profundidadeGlobal);
+        this.tamanhoBalde = tamanho;
+        this.tamanhoBits = bits;
     }
     
-    Diretorio(){
-        // Apenas para construir um diretório
-    }
+    Diretorio (){
+        // CONSTRUTOR VAZIO
+    } 
     
-    public void fatorDeCarga(){
-        this.setFatorDeCargaAtual(diretorio.size() / this.tamanhoGlobal);
-
-        if(this.getFatorDeCargaAtual() >= this.getFatorDeCargaReferencia())
-            this.duplicarDiretorio();
-    }
-    
-    public String buscaChave (String chave){
-        for (Balde balde : diretorio) {
-            if(balde.getPseudoChaves().contains(chave.substring(0, balde.getProfundidadeLocal())))
-                return balde.getPseudoChaves();
+    public int buscaChave (String chave){
+        int index = hash(chave);
+        for(int i=0; i < diretorio.get(index).balde.size(); i++){
+            if(diretorio.get(index).balde.get(i).equals(chave))
+                return i;
         }
-        return null;
+        return -1;
     }
+    
     
     public void duplicarDiretorio(){
-        this.tamanhoGlobal = this.tamanhoGlobal * 2;
+        /*this.tamanhoGlobal = this.tamanhoGlobal * 2;
         this.profundidadeGlobal = this.profundidadeGlobal + 1;
         String chave;
         Balde baldes = new Balde();
-        String tipo = this.tipo();
         for(int i=0; i< tamanhoGlobal / 2; i++){
-            if(tipo.equals("bits")){
-                chave = baldes.balde.get(i).getChave();
-                this.diretorio.get(i).setPseudoChaves("0".concat(chave));
-            }else{
-                chave = baldes.balde.get(i).getChave();
-                String substring = chave.substring(0,profundidadeGlobal);
-                this.diretorio.get(i).setPseudoChaves(substring);
-            }    
-        }
+            chave = baldes.getBalde().get(i).getChave();
+            this.diretorio.get(i).setPseudoChaves("0".concat(chave));
+        } 
         for(int i = tamanhoGlobal/2; i < tamanhoGlobal; i++){
-            if(tipo.equals("bits")){
-                chave = baldes.balde.get(i).getChave();
-                this.diretorio.get(i).setPseudoChaves("1".concat(chave));
-            }else{
-                chave = baldes.balde.get(i).getChave();
-                String substring = chave.substring(0,profundidadeGlobal);
-                this.diretorio.get(i).setPseudoChaves(substring);
-            }
-        }
+            chave = baldes.getBalde().get(i).getChave();
+            this.diretorio.get(i).setPseudoChaves("1".concat(chave));
+        }*/
     }
-    
-    public String tipo(){
-        if(diretorio.get(0).getPseudoChaves().contains("0") || diretorio.get(0).getPseudoChaves().contains("1"))
-            return "bits";
-        else
-            return "aleatorio";
-    }
-    
+        
     public int hash (String chave){
-        String tipo = tipo();
         int index;
-        if(tipo.equals("bits")){
-            String substring = chave.substring(0,profundidadeGlobal);  
-            index = Integer.parseInt(substring, 2);
-        }else{
-            String substring = chave.substring(0,profundidadeGlobal);
-            index = Integer.parseInt(substring);
-        }
+        String substring = chave.substring(0,this.profundidadeGlobal);  
+        index = Integer.parseInt(substring, 2);
+        
         return index;
     }
     
-    public void inserirItem (Item item, int profundidadeLocal, int tamanho){
-        Balde baldes = new Balde(profundidadeLocal, tamanho);
-        fatorDeCarga();
-        int index = hash(item.getChave());
-        if(baldes.balde.size() == baldes.getTamanho()){
-            baldes.duplicarBalde(item, index);
-            int indexAtual = hash(item.getChave());
-            diretorio.get(indexAtual).inserirItem(item);
-        }else
-            diretorio.get(index).inserirItem(item);
-        baldes.setPseudoChaves(item.getChave());
+    public void duplicarBalde(int index, String chave){
+        diretorio.get(index).incrementaProfundidade();
+        Balde baldeNovo = new Balde(this.tamanhoBalde, diretorio.get(index).getProfundidadeLocal());
+        String substring = chave.substring(0, diretorio.get(index).getProfundidadeLocal());
+        ArrayList<String> chavesBaldeAntigo = new ArrayList<>();
+        for(int i=0;i < diretorio.get(index).balde.size(); i++){
+            chavesBaldeAntigo.add(diretorio.get(index).balde.get(i));
+        }
+        
+        
+        for(int i=0; i < diretorio.get(index).balde.size(); i++){
+            
+        }
+        
+    }
+    
+    public String getPseudoChave(String chave){
+        String substring = chave.substring(0,this.profundidadeGlobal);  
+        return substring;
+    }
+    
+    public void inserirItem (String chave){
+        int index = hash(chave);
+        boolean baldeCheio = false;
+        if(diretorio.get(index).balde.isEmpty())
+            baldeCheio = diretorio.get(index).isBaldeCheio();
+        
+        if(baldeCheio){
+            if(diretorio.get(index).getProfundidadeLocal() == this.profundidadeGlobal){
+                this.duplicarDiretorio();
+            }
+        }else{
+            Balde balde = new Balde(this.tamanhoBalde, this.tamanhoBits);
+            diretorio.add(balde);
+            diretorio.get(index).inserirChave(chave);
+        }
     }    
 
+    public void incrementaProfundidadeGlobal(){
+        this.profundidadeGlobal = this.profundidadeGlobal + 1;
+    }
+    
     /**
      * @return the tamanhoGlobal
      */
@@ -123,30 +123,16 @@ public class Diretorio {
     }
 
     /**
-     * @return the fatorDeCargaReferencia
+     * @return the tamanhoBalde
      */
-    public double getFatorDeCargaReferencia() {
-        return fatorDeCargaReferencia;
+    public int getTamanhoBalde() {
+        return tamanhoBalde;
     }
 
     /**
-     * @param fatorDeCargaReferencia the fatorDeCargaReferencia to set
+     * @param tamanhoBalde the tamanhoBalde to set
      */
-    public void setFatorDeCargaReferencia(double fatorDeCargaReferencia) {
-        this.fatorDeCargaReferencia = fatorDeCargaReferencia;
-    }
-
-    /**
-     * @return the fatorDeCargaAtual
-     */
-    public double getFatorDeCargaAtual() {
-        return fatorDeCargaAtual;
-    }
-
-    /**
-     * @param fatorDeCargaAtual the fatorDeCargaAtual to set
-     */
-    public void setFatorDeCargaAtual(double fatorDeCargaAtual) {
-        this.fatorDeCargaAtual = fatorDeCargaAtual;
+    public void setTamanhoBalde(int tamanhoBalde) {
+        this.tamanhoBalde = tamanhoBalde;
     }
 }

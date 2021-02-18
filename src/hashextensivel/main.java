@@ -1,11 +1,6 @@
 package hashextensivel;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -14,39 +9,63 @@ import java.util.Scanner;
  * 
  */
 public class main {
-    
-    private static ArrayList<String> leitura() throws FileNotFoundException, IOException{
-        ArrayList<String> listaDeEntrada = new ArrayList<>();
-        try {
-            BufferedReader leitura = new BufferedReader(new FileReader("entrada.txt"));
-
-            String linha = leitura.readLine(); 
-            while (linha != null) {
-                System.out.println("\n"+linha); 
-                listaDeEntrada.add(linha);
-                linha = leitura.readLine();
-            }
-            leitura.close();
-        } catch (IOException e) {
-            System.out.println("Não foi possível ler o arquivo: "+ e.getMessage());
+       
+    private static String gerarBinariosAleatorios(int bits, Random random){
+        String binarioAleatorio = "";
+	for(int i=0; i< bits; i++){
+            boolean bit = random.nextBoolean();
+            if(bit)
+                binarioAleatorio = binarioAleatorio.concat("1");
+            else
+                binarioAleatorio = binarioAleatorio.concat("0");
         }
-        return listaDeEntrada;
+        System.out.println(binarioAleatorio);
+        return binarioAleatorio;
     }
     
-    private static void processamento() throws IOException{
-        Item item;
+    private static String gerarBinariosComPadrao(int bits, Random random, String padrao){
+        String binarioAleatorio = padrao;
+	for(int i=0; i< bits - padrao.length(); i++){
+            boolean bit = random.nextBoolean();
+            if(bit)
+                binarioAleatorio = binarioAleatorio.concat("1");
+            else
+                binarioAleatorio = binarioAleatorio.concat("0");
+        }
+        System.out.println(binarioAleatorio);
+        return binarioAleatorio;
+    }
+    
+    private static void processamento(){
         Scanner input = new Scanner(System.in);
         System.out.println("Entre com o tamanho a ser usado pelos baldes: ");
         int tamanho = input.nextInt();
         System.out.println("Entre com o número de bits a serem usados nas pseudo-chaves: ");
         int bits = input.nextInt();
-        List<String> dados = leitura();
-        Diretorio diretorios = new Diretorio(bits+1);
-        for(int i=0; i< dados.size(); i++){
-            String[] chave = dados.get(i).split(";");
-            item = new Item(chave[0], chave[1]);
-            diretorios.diretorio.get(i).setPseudoChaves(chave[0]);
-            diretorios.inserirItem(item, bits, tamanho);
+        System.out.println("1 - Inserções de N pseudo-chaves aleatórias: \n"
+                + "2 - Inserções de N pseudo-chaves iniciadas com um mesmo padrão de bits\n"
+                + "3 - Sair");
+        int op = input.nextInt();
+        Random gerar = new Random(16);
+        switch (op){
+            case 1:
+                for(int i=0; i < 10; i++){
+                    String bitsAleatorios = gerarBinariosAleatorios(bits, gerar);
+                    Diretorio diretorio = new Diretorio(tamanho, bits);
+                    diretorio.inserirItem(bitsAleatorios);
+                }
+                break;
+            case 2:
+                System.out.println("Passe um padrão de bits: ");
+                String padrao = input.next();
+                for(int i=0; i < 10; i++){
+                    String bitsAleatorios = gerarBinariosComPadrao(bits, gerar, padrao);
+                    Diretorio diretorio = new Diretorio(tamanho, bits);
+                    diretorio.inserirItem(bitsAleatorios);
+                }
+                break;
+            default:
+                System.exit(0);
         }
     }
     
@@ -61,10 +80,10 @@ public class main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         cabecalho();
         processamento();
-        
+       
     }
     
 }
