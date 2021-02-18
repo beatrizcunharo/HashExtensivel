@@ -37,20 +37,38 @@ public class Diretorio {
     
     
     public void duplicarDiretorio(){
-        /*this.tamanhoGlobal = this.tamanhoGlobal * 2;
-        this.profundidadeGlobal = this.profundidadeGlobal + 1;
+        List<Balde> diretorioAuxiliar = new ArrayList<>();
+        this.tamanhoGlobal = (int) Math.pow(2, this.profundidadeGlobal);
+        for (int i = 0; i < Math.pow(2, this.profundidadeGlobal); i++) {
+            this.diretorio.add(new Balde(this.tamanhoBalde, this.tamanhoBits));
+            diretorioAuxiliar.add(new Balde(this.tamanhoBalde, this.tamanhoBits));
+        }
+        this.incrementaProfundidadeGlobal();
+        int index;
         String chave;
-        Balde baldes = new Balde();
-        for(int i=0; i< tamanhoGlobal / 2; i++){
-            chave = baldes.getBalde().get(i).getChave();
-            this.diretorio.get(i).setPseudoChaves("0".concat(chave));
-        } 
-        for(int i = tamanhoGlobal/2; i < tamanhoGlobal; i++){
-            chave = baldes.getBalde().get(i).getChave();
-            this.diretorio.get(i).setPseudoChaves("1".concat(chave));
-        }*/
+        for(int i=0; i < this.tamanhoGlobal; i++){
+            for(int j = 0; j < this.diretorio.get(i).balde.size();){
+                chave = this.diretorio.get(i).balde.get(j);
+                index = this.hash(chave);
+                
+                if(index != i){
+                    diretorioAuxiliar.get(i).inserirChave(chave);
+                    this.diretorio.get(i).balde.remove(j);
+                }else{
+                    j++;
+                }
+            }
+        }
+        
+        for (int i = 0; i < this.diretorio.size(); i++) {
+            if (diretorioAuxiliar.get(i).balde.size() > 0) {
+                this.diretorio.get(i).balde.addAll(diretorioAuxiliar.get(i).balde);
+                diretorioAuxiliar.get(i).balde.clear();
+            }
+        }
     }
         
+    
     public int hash (String chave){
         int index;
         String substring = chave.substring(0,this.profundidadeGlobal);  
@@ -59,44 +77,34 @@ public class Diretorio {
         return index;
     }
     
-    public void duplicarBalde(int index, String chave){
-        diretorio.get(index).incrementaProfundidade();
-        Balde baldeNovo = new Balde(this.tamanhoBalde, diretorio.get(index).getProfundidadeLocal());
-        String substring = chave.substring(0, diretorio.get(index).getProfundidadeLocal());
-        ArrayList<String> chavesBaldeAntigo = new ArrayList<>();
-        for(int i=0;i < diretorio.get(index).balde.size(); i++){
-            chavesBaldeAntigo.add(diretorio.get(index).balde.get(i));
-        }
-        
-        
-        for(int i=0; i < diretorio.get(index).balde.size(); i++){
-            
-        }
-        
-    }
-    
+   
     public String getPseudoChave(String chave){
         String substring = chave.substring(0,this.profundidadeGlobal);  
         return substring;
     }
     
     public void inserirItem (String chave){
-        int index = hash(chave);
-        boolean baldeCheio = false;
-        if(diretorio.get(index).balde.isEmpty())
-            baldeCheio = diretorio.get(index).isBaldeCheio();
-        
-        if(baldeCheio){
-            if(diretorio.get(index).getProfundidadeLocal() == this.profundidadeGlobal){
-                this.duplicarDiretorio();
-            }
-        }else{
+        boolean baldeCheio;
+        if(diretorio.isEmpty()){
             Balde balde = new Balde(this.tamanhoBalde, this.tamanhoBits);
             diretorio.add(balde);
-            diretorio.get(index).inserirChave(chave);
+            diretorio.get(0).inserirChave(chave);
+        }else{
+            int index = hash(chave);
+            baldeCheio = diretorio.get(index).isBaldeCheio();
+            if(baldeCheio){
+                if(diretorio.get(index).getProfundidadeLocal() == this.profundidadeGlobal){
+                    this.duplicarDiretorio();
+                }
+            }else{
+                Balde balde = new Balde(this.tamanhoBalde, this.tamanhoBits);
+                diretorio.add(balde);
+                diretorio.get(index).inserirChave(chave);
+            }
         }
-    }    
-
+        System.out.println("Inseriu");
+    }
+    
     public void incrementaProfundidadeGlobal(){
         this.profundidadeGlobal = this.profundidadeGlobal + 1;
     }

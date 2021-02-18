@@ -72,8 +72,8 @@ public class main {
     
     private static void cabecalho(){
         System.out.println("ALUNA: BEATRIZ CUNHA RODRIGUES \n"
-        + "MATRÍCULA: 201776038 \n"
-        + "Trabalho de implementação hash extensível.");        
+        + "MATRICULA: 201776038 \n"
+        + "Trabalho de implementacao hash extensivel.\n");        
     }
     
     
@@ -83,7 +83,6 @@ public class main {
     public static void main(String[] args){
         cabecalho();
         processamento();
-       
     }
     
 }
